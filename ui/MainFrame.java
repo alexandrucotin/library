@@ -13,8 +13,8 @@ import javax.swing.JPanel;
 public class MainFrame extends JFrame {
 	JMenuBar menuBar;
 	JMenu homeshop, topCat, orders, login, register, exit;
-	ShopPanel shopPanel;
-	private OrderTrack orderTrack = new OrderTrack();
+	ShopPanel shopPanel = new ShopPanel();
+	OrderTrack orderTrack = new OrderTrack();
 	
 	
 	
@@ -48,7 +48,6 @@ public class MainFrame extends JFrame {
 		menuBar.add(topCat);
 		
 		orders = new JMenu("Orders");
-		orders.addActionListener(new MenuAction(orderTrack));
 		menuBar.add(orders);
 		
 		login = new JMenu("Login");
@@ -57,15 +56,18 @@ public class MainFrame extends JFrame {
 		register = new JMenu("Register");
 		menuBar.add(register);
 		
+
 		setJMenuBar(menuBar);
+
+		orders.addActionListener(new MenuAction(orderTrack));
+		homeshop.addActionListener(new MenuAction(shopPanel));
+		
 	}
 	
 	public void initMainFrame () {
 		// Frame setup
 		setSize(400, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		shopPanel = new ShopPanel();
 		add(shopPanel);
 		setVisible(true);
 	}
@@ -75,6 +77,7 @@ public class MainFrame extends JFrame {
 		super("Welcome!");
 		initMenu();
 		initMainFrame();
+		setLayout(new BorderLayout());
 	}
 
 }
