@@ -14,8 +14,7 @@ public class OrderTrack extends JPanel {
 	private JTextField textField;
 	
 
-	public OrderTrack() {
-		setLayout(null);
+	public OrderTrack() { 
 		
 		JLabel lblTrackYourOrder = new JLabel("Track Your Order");
 		lblTrackYourOrder.setHorizontalAlignment(SwingConstants.CENTER);
