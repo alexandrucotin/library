@@ -24,6 +24,7 @@ public class MainFrame extends JFrame {
 	// PANELS TO SWITCH //
 	ShopPanel shopPanel = new ShopPanel();
 	OrderTrack orderTrack = new OrderTrack();
+	BookPanel bookPanel = new BookPanel();
 	//BookPanel bookPanel = new BookPanel();
 
 	
@@ -66,16 +67,7 @@ public class MainFrame extends JFrame {
 		});
 		
 	}
-	
-	
-	
-	public void Clayout() {
-		panelCont.setLayout(cardLayout);
-		panelCont.add(shopPanel, "shopPage");
-		panelCont.add(orderTrack, "orderTrack");
-		cardLayout.show(panelCont,"shopPage");
-	}
-	
+
 	public MainFrame() {
 		super("Welcome!");
 		initMenu();
@@ -83,7 +75,11 @@ public class MainFrame extends JFrame {
 		add(panelCont);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-		Clayout();
+		panelCont.setLayout(cardLayout);
+		panelCont.add(shopPanel, "shopPage");
+		panelCont.add(orderTrack, "orderTrack");
+		panelCont.add(bookPanel, "bookPage");
+		cardLayout.show(panelCont,"bookPage");
 	}
 
 }

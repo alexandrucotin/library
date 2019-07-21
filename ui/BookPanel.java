@@ -1,4 +1,4 @@
-/**package ui;
+package ui;
 
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
@@ -15,12 +15,13 @@ import javax.swing.JTextPane;
 
 public class BookPanel extends JPanel {
 
-	private ArrayList<String> bookInfo;
+	public ArrayList<String> bookInfo = new ArrayList<String>();
 	
-	
-	private ArrayList<String> bookQuery (String query) throws SQLException {
+	public ArrayList<String> bookQuery (String query) throws SQLException {
 		DBQuery infoBook = new DBQuery();
 		bookInfo = infoBook.QueryAll(query);
+
+		System.out.println(bookInfo);
 		return bookInfo;
 	}
 
@@ -72,14 +73,22 @@ public class BookPanel extends JPanel {
 		gbc_lblPoints.gridy = 3;
 		add(lblPoints, gbc_lblPoints);
 		
-		
+//		populateArr();
 		// BOOK INFO //
+		try {
+			bookQuery("select * from book where isbn=\"9780062498564\";");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		for (int i=0; i<bookInfo.size(); i++) {
+			
 			JLabel lblTitle_1 = new JLabel(bookInfo.get(i));
 			GridBagConstraints gbc_lblTitle_1 = new GridBagConstraints();
 			gbc_lblTitle_1.insets = new Insets(0, 0, 5, 5);
 			gbc_lblTitle_1.gridx = 0+i;
-			gbc_lblTitle_1.gridy = 4;
+			gbc_lblTitle_1.gridy = 4+i;
 			add(lblTitle_1, gbc_lblTitle_1);
 		}
 		
@@ -103,4 +112,3 @@ public class BookPanel extends JPanel {
 	}
 
 }
-*/

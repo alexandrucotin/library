@@ -46,14 +46,14 @@ public class DBQuery {
 		Connection con = null;
 		Statement stmt = null;
 		ResultSet rs = null;
-
-		ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData(); 
-		int columnCount = rsmd.getColumnCount();
-		ArrayList<String> results = new ArrayList<String>(columnCount);
+		ArrayList<String> results = null;
 		try {
 			con = ds.getConnection();
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(query);
+			ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData(); 
+			int columnCount = rsmd.getColumnCount();
+			results = new ArrayList<String>(columnCount);
 			while(rs.next()){
 				//System.out.println("title="+rs.getString("title")+", author="+rs.getString("author"));
 				int i = 1;
