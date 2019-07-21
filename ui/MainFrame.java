@@ -1,6 +1,6 @@
 package ui;
 
-import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,36 +11,28 @@ import javax.swing.JPanel;
 
 
 public class MainFrame extends JFrame {
+	
+	// MENU ITEMS //
 	JMenuBar menuBar;
 	JMenu homeshop, topCat, orders, login, register, exit;
+	
+	// CARD LAYOUT //
+	JPanel panelCont = new JPanel();
+	CardLayout cardLayout = new CardLayout();
+	
+	
+	// PANELS TO SWITCH //
 	ShopPanel shopPanel = new ShopPanel();
 	OrderTrack orderTrack = new OrderTrack();
-	
-	
-	
-	private void changePanel(JPanel panel) {
-	    getContentPane().removeAll();
-	    getContentPane().add(panel, BorderLayout.CENTER);
-	    getContentPane().doLayout();
-	    update(getGraphics());
-	}
-	
-	private class MenuAction implements ActionListener {
-	    private JPanel panel;
-	    private MenuAction(JPanel pnl) {
-	        this.panel = pnl;
-	    }
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-	        changePanel(panel);
+	//BookPanel bookPanel = new BookPanel();
 
-	    }
-	}
 	
 	private void initMenu() {
 		// Menu setup
 		menuBar = new JMenuBar();
+		
 		//Items
+		
 		homeshop = new JMenu("Shop");
 		menuBar.add(homeshop);
 		
@@ -58,26 +50,40 @@ public class MainFrame extends JFrame {
 		
 
 		setJMenuBar(menuBar);
-
-		orders.addActionListener(new MenuAction(orderTrack));
-		homeshop.addActionListener(new MenuAction(shopPanel));
+		
+		homeshop.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+			cardLayout.show(panelCont, "shopPage");
+			}
+		});
+		
+		orders.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+			cardLayout.show(panelCont, "orderTrack");
+			}
+		});
 		
 	}
 	
-	public void initMainFrame () {
-		// Frame setup
-		setSize(400, 300);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		add(shopPanel);
-		setVisible(true);
+	
+	
+	public void Clayout() {
+		panelCont.setLayout(cardLayout);
+		panelCont.add(shopPanel, "shopPage");
+		panelCont.add(orderTrack, "orderTrack");
+		cardLayout.show(panelCont,"shopPage");
 	}
-
 	
 	public MainFrame() {
 		super("Welcome!");
 		initMenu();
-		initMainFrame();
-		setLayout(new BorderLayout());
+		setSize(400, 150);
+		add(panelCont);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
+		Clayout();
 	}
 
 }

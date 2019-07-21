@@ -43,6 +43,5 @@ public class OrderTrack extends JPanel {
 			}
 		});
 		add(btnNewButton);
-
 	}
 }
