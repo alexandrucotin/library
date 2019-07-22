@@ -3,17 +3,19 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 
-public class MainFrame {
+public class MainFrame extends JFrame implements ItemListener {
 	
 	
 	// MENU ITEMS //
@@ -39,73 +41,65 @@ public class MainFrame {
         cards.add(orderTrack, "order");
         pane.add(cards, BorderLayout.CENTER);
     }
-	
+
     public void itemStateChanged(ItemEvent evt) {
         CardLayout cl = (CardLayout)(cards.getLayout());
         cl.show(cards, (String)evt.getItem());
     }
     
-    private static void createAndShowGUI() {
+
+    
+    public  void createAndShowGUI() {
 
     	// MENU ITEMS //
     	JMenuBar menuBar;
-    	JMenu homeshop, topCat, orders, login, register, exit;
+    	JMenu pages, orders, personal, login, register;
+    	JMenuItem shop, topBook, orderTracking, personalInfo, orderInfo;
+    	
     	// Menu setup
     	menuBar = new JMenuBar();
     			
     	//Items
-    	homeshop = new JMenu("Shop");
-    	menuBar.add(homeshop);
-    			
-    	topCat = new JMenu("Top Books");
-    	menuBar.add(topCat);
+    	pages = new JMenu("Pages");
+    	shop = new JMenuItem("Shop");
+    	topBook = new JMenuItem("Top Books");
+    	menuBar.add(pages);
+    	pages.add(shop);
+    	pages.add(topBook);
     			
     	orders = new JMenu("Orders");
+    	orderTracking = new JMenuItem("Order Tracking");
+    	orderInfo = new JMenuItem("Order Info");
     	menuBar.add(orders);
+    	orders.add(orderTracking);
+    	orders.add(orderInfo);
     			
+    	personal = new JMenu("Personal");
+    	personalInfo = new JMenuItem("Personal Info");
+    	menuBar.add(personal);
+    	personal.add(personalInfo);
+    	
     	login = new JMenu("Login");
     	menuBar.add(login);
     			
     	register = new JMenu("Register");
     	menuBar.add(register);
     			
-    	JFrame frame = new JFrame("CardLayoutDemo");
         //Create and set up the window.
         
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          
         //Create and set up the content pane.
-        MainFrame demo = new MainFrame();
-        demo.addComponentToPane(frame.getContentPane());
-        frame.setJMenuBar(menuBar);
+        
+        setJMenuBar(menuBar);
         //Display the window.
-        frame.pack();
-        frame.setVisible(true);
+        setVisible(true);
+        addComponentToPane(getContentPane());
+        pack();
     }
 
 	public MainFrame() {
-		/* Use an appropriate Look and Feel */
-        try {
-            //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        } catch (UnsupportedLookAndFeelException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        /* Turn off metal's use of bold fonts */
-        UIManager.put("swing.boldMetal", Boolean.FALSE);
-         
-        //Schedule a job for the event dispatch thread:
-        //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
+		createAndShowGUI();
+        
     }
-	}
+}
