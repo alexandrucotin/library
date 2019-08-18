@@ -5,32 +5,23 @@ import java.util.Date;
 
 public class Book {
 	private String isbn;
-	private String author;
 	private String title;
-	private String publishingHouse;
+	private String author;
+	private String publishing_house;
+	private String publication_year;
 	private String category;
-	private BigDecimal price;
-	private Date publicationDate;
+	private Integer price;
 	private String description;
-	private int points;
-	private int boughtTimes;
-	
-	public Book () {};
-	
-	public Book(String isbn, String author, String title, String publishingHouse, String category, BigDecimal price,
-			Date publicationDate, String description, int points, int boughtTimes) {
-		super();
-		this.isbn = isbn;
-		this.author = author;
-		this.title = title;
-		this.publishingHouse = publishingHouse;
-		this.category = category;
-		this.price = price;
-		this.publicationDate = publicationDate;
-		this.description = description;
-		this.points = points;
-		this.boughtTimes = boughtTimes;
+	private Integer points;
+	private Integer bought_times;
+
+	public String getPublication_year() {
+		return publication_year;
 	}
+	public void setPublication_year(String publication_year) {
+		this.publication_year = publication_year;
+	}
+	
 	public String getIsbn() {
 		return isbn;
 	}
@@ -49,29 +40,36 @@ public class Book {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getPublishingHouse() {
-		return publishingHouse;
+	public String getPublishing_house() {
+		return publishing_house;
 	}
-	public void setPublishingHouse(String publishingHouse) {
-		this.publishingHouse = publishingHouse;
+
+	public void setPublishing_house(String publishing_house) {
+		this.publishing_house = publishing_house;
 	}
+
+	
+	
+
+	public Integer getBought_times() {
+		return bought_times;
+	}
+
+	public void setBought_times(Integer bought_times) {
+		this.bought_times = bought_times;
+	}
+
 	public String getCategory() {
 		return category;
 	}
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	public BigDecimal getPrice() {
+	public Integer getPrice() {
 		return price;
 	}
-	public void setPrice(BigDecimal price) {
+	public void setPrice(Integer price) {
 		this.price = price;
-	}
-	public Date getPublicationDate() {
-		return publicationDate;
-	}
-	public void setPublicationDate(Date publicationDate) {
-		this.publicationDate = publicationDate;
 	}
 	public String getDescription() {
 		return description;
@@ -79,17 +77,11 @@ public class Book {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public int getPoints() {
+	public Integer getPoints() {
 		return points;
 	}
-	public void setPoints(int points) {
+	public void setPoints(Integer points) {
 		this.points = points;
-	}
-	public int getBoughtTimes() {
-		return boughtTimes;
-	}
-	public void setBoughtTimes(int boughtTimes) {
-		this.boughtTimes = boughtTimes;
 	}
 	
 	

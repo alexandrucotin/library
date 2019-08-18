@@ -32,7 +32,7 @@ public class ShopPanel2 extends JPanel {
 	
 	public Book bookQuery (String query) throws SQLException {
 		DBQuery infoBook = new DBQuery();
-		bookInfo = infoBook.queryBooks(query);
+		bookInfo = infoBook.queryBook(query);
 		return bookInfo;
 	}
 	
