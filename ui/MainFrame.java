@@ -28,17 +28,18 @@ public class MainFrame extends JFrame implements ItemListener {
 	
 	
 	// PANELS TO SWITCH //
-	ShopPanel shopPanel = new ShopPanel();
+	ShopPanel2 shopPanel = new ShopPanel2();
 	OrderTrack orderTrack = new OrderTrack();
-	BookPanel bookPanel = new BookPanel();
-	//BookPanel bookPanel = new BookPanel();
+	TopBook topBooks = new TopBook();
 
 	public void addComponentToPane(Container pane) {
 
         //Create the panel that contains the "cards".
         cards = new JPanel(new CardLayout());
-        cards.add(shopPanel, "shop");
-        cards.add(orderTrack, "order");
+        cards.add(shopPanel, "Shop");
+        cards.add(orderTrack, "Order Tracking");
+        cards.add(topBooks, "Top Books");
+       // cb.addItemListener(this);
         pane.add(cards, BorderLayout.CENTER);
     }
 
@@ -66,13 +67,58 @@ public class MainFrame extends JFrame implements ItemListener {
     	menuBar.add(pages);
     	pages.add(shop);
     	pages.add(topBook);
+    	topBook.addActionListener(new ActionListener() {
+    	    public void actionPerformed(ActionEvent ev) {
+    	        CardLayout cl = (CardLayout)(cards.getLayout());
+    	        Object source = ev.getSource();
+    	        if (source instanceof JMenuItem) {
+    	        	JMenuItem menuItem = (JMenuItem)source;
+    	            String menuItemTxt = menuItem.getText();
+        	        cl.show(cards, menuItemTxt);
+    	        }
+    	    }
+    	});
+    	shop.addActionListener(new ActionListener() {
+    	    public void actionPerformed(ActionEvent ev) {
+    	        CardLayout cl = (CardLayout)(cards.getLayout());
+    	        Object source = ev.getSource();
+    	        if (source instanceof JMenuItem) {
+    	        	JMenuItem menuItem = (JMenuItem)source;
+    	            String menuItemTxt = menuItem.getText();
+        	        cl.show(cards, menuItemTxt);
+    	        }
+    	    }
+    	});
     			
     	orders = new JMenu("Orders");
     	orderTracking = new JMenuItem("Order Tracking");
     	orderInfo = new JMenuItem("Order Info");
     	menuBar.add(orders);
+    	
     	orders.add(orderTracking);
+    	orderTracking.addActionListener(new ActionListener() {
+    	    public void actionPerformed(ActionEvent ev) {
+    	        CardLayout cl = (CardLayout)(cards.getLayout());
+    	        Object source = ev.getSource();
+    	        if (source instanceof JMenuItem) {
+    	        	JMenuItem menuItem = (JMenuItem)source;
+    	            String menuItemTxt = menuItem.getText();
+        	        cl.show(cards, menuItemTxt);
+    	        }
+    	    }
+    	});
     	orders.add(orderInfo);
+    	orderInfo.addActionListener(new ActionListener() {
+    	    public void actionPerformed(ActionEvent ev) {
+    	        CardLayout cl = (CardLayout)(cards.getLayout());
+    	        Object source = ev.getSource();
+    	        if (source instanceof JMenuItem) {
+    	        	JMenuItem menuItem = (JMenuItem)source;
+    	            String menuItemTxt = menuItem.getText();
+        	        cl.show(cards, menuItemTxt);
+    	        }
+    	    }
+    	});
     			
     	personal = new JMenu("Personal");
     	personalInfo = new JMenuItem("Personal Info");
@@ -93,9 +139,11 @@ public class MainFrame extends JFrame implements ItemListener {
         
         setJMenuBar(menuBar);
         //Display the window.
+        
+        setSize(600,450);
         setVisible(true);
         addComponentToPane(getContentPane());
-        pack();
+        
     }
 
 	public MainFrame() {
