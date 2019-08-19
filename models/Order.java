@@ -3,62 +3,64 @@ package models;
 import java.util.Date;
 
 public class Order {
-	private String idOrder;
-	private Date orderDay;
-	private String orderContent;
-	private String idUser;
-	private int totalPrice;
-	private int points;
-	private String bookCardId;
-	private String paymentType;
+	private String idorder;
+	private String iduser;
+	private String order_content;
+	private String order_day;
+	private Integer tot_price;
+	private Integer points;
+	private String bookcard_id;
+	private String payment_type;
 	
-	public String getIdOrder() {
-		return idOrder;
+	public String getIdorder() {
+		return idorder;
 	}
-	public void setIdOrder(String idOrder) {
-		this.idOrder = idOrder;
+	public void setIdorder(String idorder) {
+		this.idorder = idorder;
 	}
-	public Date getOrderDay() {
-		return orderDay;
+	public String getOrder_day() {
+		return order_day;
 	}
-	public void setOrderDay(Date orderDay) {
-		this.orderDay = orderDay;
+	public void setOrder_day(String order_day) {
+		this.order_day = order_day;
 	}
-	public String getOrderContent() {
-		return orderContent;
+	public String getOrder_content() {
+		return order_content;
 	}
-	public void setOrderContent(String orderContent) {
-		this.orderContent = orderContent;
+	public void setOrder_content(String order_content) {
+		this.order_content = order_content;
 	}
-	public String getIdUser() {
-		return idUser;
+	public String getIduser() {
+		return iduser;
 	}
-	public void setIdUser(String idUser) {
-		this.idUser = idUser;
+	public void setIduser(String iduser) {
+		this.iduser = iduser;
 	}
-	public int getTotalPrice() {
-		return totalPrice;
+	public Integer getTot_price() {
+		return tot_price;
 	}
-	public void setTotalPrice(int totalPrice) {
-		this.totalPrice = totalPrice;
+	public void setTot_price(Integer tot_price) {
+		this.tot_price = tot_price;
 	}
-	public int getPoints() {
+	public Integer getPoints() {
 		return points;
 	}
-	public void setPoints(int points) {
+	public void setPoints(Integer points) {
 		this.points = points;
 	}
-	public String getBookCardId() {
-		return bookCardId;
+	public String getBookcard_id() {
+		return bookcard_id;
 	}
-	public void setBookCardId(String bookCardId) {
-		this.bookCardId = bookCardId;
+	public void setBookcard_id(String bookcard_id) {
+		this.bookcard_id = bookcard_id;
 	}
-	public String getPaymentType() {
-		return paymentType;
+	public String getPayment_type() {
+		return payment_type;
 	}
-	public void setPaymentType(String paymentType) {
-		this.paymentType = paymentType;
+	public void setPayment_type(String payment_type) {
+		this.payment_type = payment_type;
 	}
+	
+
 
 }

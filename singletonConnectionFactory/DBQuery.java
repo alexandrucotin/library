@@ -5,18 +5,16 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 import com.mysql.jdbc.ResultSetMetaData;
 
 import models.Book;
+import models.Order;
 
 public class DBQuery {
 	DataSource ds =  MyDataSourceFactory.getMySQLDataSource();
@@ -54,7 +52,7 @@ public class DBQuery {
 	public Book queryBook (String query) throws SQLException {
 		Book book = new Book();
 		HashMap<String, Object> bookMap = new HashMap<>();
-		bookMap = genericQuery(query);
+		bookMap = genericQuery(query).get(0);
 		Class cls = book.getClass();
         // returns the array of Field objects
         Field[] fields = cls.getDeclaredFields();
@@ -83,40 +81,77 @@ public class DBQuery {
         } 
 		return book;
 	}
-
-	public Book queryBooks (String query) throws SQLException {
-		Book book = null;
-		try {
-			con = ds.getConnection();
-			stmt = con.createStatement();
-			rs = stmt.executeQuery(query);
-			ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
-			book = new Book();
-			while(rs.next()){
-				book.setIsbn(rs.getString("isbn"));
-				book.setTitle(rs.getString("title"));
-				book.setAuthor(rs.getString("author"));
-				book.setPublishing_house(rs.getString("publishing_house"));				
-				book.setPublication_year(rs.getString("publication_year"));
-				book.setCategory(rs.getString("category"));
-				book.setPrice(rs.getInt("price"));
-				book.setDescription(rs.getString("description"));
-				book.setPoints(rs.getInt("points"));;
-				book.setBought_times(rs.getInt("bought_times"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally{
-				try {
-					if(rs != null) rs.close();
-					if(stmt != null) stmt.close();
-					if(con != null) con.close();
-				} catch (SQLException e) {
+	
+	public Order queryOrder (String query) throws SQLException {
+		Order order = new Order();
+		HashMap<String, Object> orderMap = new HashMap<>();
+		orderMap = genericQuery(query).get(0);
+		Class cls = order.getClass();
+        // returns the array of Field objects
+        Field[] fields = cls.getDeclaredFields();
+        for(int i = 0; i < fields.length; i++) {
+        	fields[i].setAccessible(true);
+        	String key = fields[i].getName();
+        	
+        	if (orderMap.get(key) != null ) {
+        		Object value = orderMap.get(key);
+            	if (Integer.class.isAssignableFrom(fields[i].getType())) {
+            	    value = Integer.valueOf((String) orderMap.get(key));
+            	} else {
+            		value = (String) orderMap.get(key);
+            	}
+        		try {
+					fields[i].set(order, value);
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-		}
-		return book;
+        	}
+        	
+        } 
+		return order;
 	}
+	
+	public List<Book> queryTopBooks (String query) throws SQLException {
+		List<Book> topBooks = new ArrayList<>();
+		List<HashMap<String,Object>> bookList = genericQuery(query);
+        for (HashMap<String, Object> element : bookList) {
+    		Book book = new Book();
+    		Class cls = book.getClass();
+            // returns the array of Field objects
+            Field[] fields = cls.getDeclaredFields();
+        	for(int i = 0; i < fields.length; i++) {
+            	fields[i].setAccessible(true);
+            	String key = fields[i].getName();
+            	
+            	if (element.get(key) != null ) {
+            		Object value = element.get(key);
+                	if (Integer.class.isAssignableFrom(fields[i].getType())) {
+                	    value = Integer.valueOf((String) element.get(key));
+                	} else {
+                		value = (String) element.get(key);
+                	}
+            		try {
+    					fields[i].set(book, value);
+    				} catch (IllegalArgumentException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				} catch (IllegalAccessException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+            	}
+            	
+            }
+        	topBooks.add(book);
+        }
+		return topBooks;
+	}
+	
+	
 	public ArrayList<String> queryAll (String query) throws SQLException {
 		ArrayList<String> results = null;
 		try {
@@ -148,8 +183,8 @@ public class DBQuery {
 		return results;
 	}
 	
-	public HashMap<String,Object> genericQuery (String query) throws SQLException {
-		HashMap<String, Object> info = new HashMap<>();
+	public List<HashMap<String,Object>> genericQuery (String query) throws SQLException {
+		List<HashMap<String, Object>> infoList = new ArrayList<>();
 		try {
 			con = ds.getConnection();
 			stmt = con.createStatement();
@@ -158,11 +193,12 @@ public class DBQuery {
 			int columnCount = rsmd.getColumnCount();
 			while(rs.next()){
 				//System.out.println("title="+rs.getString("title")+", author="+rs.getString("author"));
-				
+				HashMap<String,Object> element = new HashMap<>();
 				for (int i = 1; i<=columnCount; i++) {
 					String value= rs.getString(i);
-					info.put(rsmd.getColumnLabel(i), value);
+					element.put(rsmd.getColumnLabel(i), value);
 				}
+				infoList.add(element);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -175,7 +211,7 @@ public class DBQuery {
 					e.printStackTrace();
 				}
 		}
-		return info;
+		return infoList;
 	}
 
 	public DBQuery() {

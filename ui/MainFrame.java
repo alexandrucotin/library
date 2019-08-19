@@ -28,7 +28,7 @@ public class MainFrame extends JFrame implements ItemListener {
 	
 	
 	// PANELS TO SWITCH //
-	ShopPanel2 shopPanel = new ShopPanel2();
+	ShopPanel shopPanel = new ShopPanel();
 	OrderTrack orderTrack = new OrderTrack();
 	TopBook topBooks = new TopBook();
 
@@ -55,7 +55,7 @@ public class MainFrame extends JFrame implements ItemListener {
     	// MENU ITEMS //
     	JMenuBar menuBar;
     	JMenu pages, orders, personal, login, register;
-    	JMenuItem shop, topBook, orderTracking, personalInfo, orderInfo;
+    	JMenuItem shop, topBooks, orderTracking, personalInfo, orderInfo;
     	
     	// Menu setup
     	menuBar = new JMenuBar();
@@ -63,11 +63,11 @@ public class MainFrame extends JFrame implements ItemListener {
     	//Items
     	pages = new JMenu("Pages");
     	shop = new JMenuItem("Shop");
-    	topBook = new JMenuItem("Top Books");
+    	topBooks = new JMenuItem("Top Books");
     	menuBar.add(pages);
     	pages.add(shop);
-    	pages.add(topBook);
-    	topBook.addActionListener(new ActionListener() {
+    	pages.add(topBooks);
+    	topBooks.addActionListener(new ActionListener() {
     	    public void actionPerformed(ActionEvent ev) {
     	        CardLayout cl = (CardLayout)(cards.getLayout());
     	        Object source = ev.getSource();
@@ -140,7 +140,7 @@ public class MainFrame extends JFrame implements ItemListener {
         setJMenuBar(menuBar);
         //Display the window.
         
-        setSize(600,450);
+        setSize(650,400);
         setVisible(true);
         addComponentToPane(getContentPane());
         

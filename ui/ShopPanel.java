@@ -19,15 +19,14 @@ import javax.swing.table.DefaultTableModel;
 import models.Book;
 import singletonConnectionFactory.DBQuery;
 
-public class ShopPanel2 extends JPanel {
+public class ShopPanel extends JPanel {
 	
 	private JList<String> shopList;
 	private ArrayList<String> titleBooks;
 	private String[][] data;
-	private String[] columnNames = { "ISBN", "Title", "Author", "Publishing House", "Publication Year", "Category", "Price", "Description", "Points", "Bought Times"}; 
+	private String[] columnNames = {"Title", "Author", "Publishing House", "Category", "Price"}; 
 	private JTable table; 
 	DefaultTableModel model;
-	
 	private Book bookInfo = new Book ();
 	
 	public Book bookQuery (String query) throws SQLException {
@@ -41,8 +40,9 @@ public class ShopPanel2 extends JPanel {
 		this.data = new String[0][columnNames.length];
 		this.table = new JTable(data, columnNames); 
 		this.table.setFillsViewportHeight(true);
-		this.table.setPreferredScrollableViewportSize(new Dimension(900,50));
-		this.model = new DefaultTableModel(columnNames,0);      
+		this.table.setPreferredScrollableViewportSize(new Dimension(600,50));
+		this.model = new DefaultTableModel(columnNames,0);
+		this.table.setRowHeight(50);
         JScrollPane sp = new JScrollPane(this.table); 
         add(sp);
         model.addRow(new String[columnNames.length]);
@@ -51,31 +51,37 @@ public class ShopPanel2 extends JPanel {
 	
 	public void bookPanel(String title) {
 		try {
-			bookQuery("select * from book where title='" + title +"'");
+			bookQuery("select title, author, publishing_house, category, price from book where title='" + title +"'");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 try {            
+		 try {     
+
 	         Class cls = bookInfo.getClass();
 	         // returns the array of Field objects
 	         Field[] fields = cls.getDeclaredFields();
-		     data = new String[1][fields.length];
+		     data = new String[1][6];
+
+		 	int selectedField = 0;
 	         for(int i = 0; i < fields.length; i++) {
 	        	fields[i].setAccessible(true);
+	        	
 	            Object value = fields[i].get(bookInfo);
-		        //System.out.println(value);
-	            data[0][i] = value.toString();
-	            model.setValueAt(value.toString(), 0, i);
+	            if (value != null) {
+			        //System.out.println(value);
+		            data[0][selectedField] = value.toString();
+		            model.setValueAt(value.toString(), 0, selectedField);
+		            selectedField++;
+	            }
 	         }
 	      } catch(Exception e) {
 	         System.out.println(e.toString());
 	      }
 	}
 	
-	public ShopPanel2() {
-		initializeTable();
-		
+	public ShopPanel() {
+		 initializeTable();
 		// QUERY //
 		DBQuery bookTitle = new DBQuery();
 		titleBooks = bookTitle.queryOne("select title from book", "title");

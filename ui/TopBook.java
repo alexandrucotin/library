@@ -1,60 +1,87 @@
 package ui;
 
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Vector;
 
-import javax.sql.DataSource;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-import com.mysql.jdbc.ResultSetMetaData;
-
-import singletonConnectionFactory.MyDataSourceFactory;
+import models.Book;
+import singletonConnectionFactory.DBQuery;
 
 public class TopBook extends JPanel {
 
-	/**
-	 * Create the panel.
-	 */
+	private String[][] data;
+	private String[] columnNames = { "Title", "Author", "Publishing House", "Category", "Bought Times" };
+	private JTable table;
+	DefaultTableModel model;
 
-    private DefaultTableModel model = new DefaultTableModel();
-    private JTable jtbl = new JTable(model);
-	
-	
-	public void TopBooks() {
-		DataSource ds =  MyDataSourceFactory.getMySQLDataSource();
-		Connection con = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		model.addColumn("Title");
-        model.addColumn("Author");
-        model.addColumn("Bought Times");
-		try {
-			con = ds.getConnection();
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("select author, title, bought_times from book ORDER BY bought_times ASC");
-			while(rs.next()){
-				model.addRow(new Object[]{rs.getInt(1), rs.getString(2),rs.getString(3),rs.getString(4)});
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally{
-				try {
-					if(rs != null) rs.close();
-					if(stmt != null) stmt.close();
-					if(con != null) con.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-		}
-		JScrollPane sp = new JScrollPane(jtbl); 
-		add(sp);
+	public List<Book> bookQuery(String query) throws SQLException {
+		DBQuery infoBook = new DBQuery();
+		List<Book> bookInfo = infoBook.queryTopBooks(query);
+		return bookInfo;
 	}
-	
+
+	public void initializeTable() {
+		this.data = new String[0][columnNames.length];
+		this.table = new JTable(data, columnNames);
+		this.table.setFillsViewportHeight(true);
+		this.table.setPreferredScrollableViewportSize(new Dimension(600, 150));
+		this.model = new DefaultTableModel(columnNames, 0);
+		this.table.setRowHeight(20);
+		JScrollPane sp = new JScrollPane(this.table);
+		add(sp);
+		model.addRow(new String[columnNames.length]);
+		this.table.setModel(model);
+	}
+
+	public void bookPanel() {
+		try {
+			List<Book> bookList = bookQuery(
+					"select title, author, publishing_house, category, bought_times from book ORDER BY bought_times DESC");
+			for (Book book : bookList) {
+				Class cls = book.getClass();
+				// returns the array of Field objects
+				Field[] fields = cls.getDeclaredFields();
+				String[] selectedBook = new String[columnNames.length];
+				int j = 0;
+				for (int i = 0; i < fields.length; i++) {
+					fields[i].setAccessible(true);
+
+					Object value = fields[i].get(book);
+					if (value != null) {
+						// System.out.println(value);
+						selectedBook[j] = value.toString();
+						j++;
+					}
+					
+				}
+				model.addRow(selectedBook);
+			}
+			
+		} catch (SQLException | IllegalArgumentException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public TopBook() {
+		initializeTable();
+		// QUERY //
+		bookPanel();
+
+	}
+
 }
