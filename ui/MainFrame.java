@@ -31,6 +31,7 @@ public class MainFrame extends JFrame implements ItemListener {
 	ShopPanel shopPanel = new ShopPanel();
 	OrderTrack orderTrack = new OrderTrack();
 	TopBook topBooks = new TopBook();
+	UserPage userPage = new UserPage();
 
 	public void addComponentToPane(Container pane) {
 
@@ -39,6 +40,7 @@ public class MainFrame extends JFrame implements ItemListener {
         cards.add(shopPanel, "Shop");
         cards.add(orderTrack, "Order Tracking");
         cards.add(topBooks, "Top Books");
+        cards.add(userPage, "Personal Info");
        // cb.addItemListener(this);
         pane.add(cards, BorderLayout.CENTER);
     }
@@ -124,6 +126,17 @@ public class MainFrame extends JFrame implements ItemListener {
     	personalInfo = new JMenuItem("Personal Info");
     	menuBar.add(personal);
     	personal.add(personalInfo);
+    	personalInfo.addActionListener(new ActionListener() {
+    	    public void actionPerformed(ActionEvent ev) {
+    	        CardLayout cl = (CardLayout)(cards.getLayout());
+    	        Object source = ev.getSource();
+    	        if (source instanceof JMenuItem) {
+    	        	JMenuItem menuItem = (JMenuItem)source;
+    	            String menuItemTxt = menuItem.getText();
+        	        cl.show(cards, menuItemTxt);
+    	        }
+    	    }
+    	});
     	
     	login = new JMenu("Login");
     	menuBar.add(login);

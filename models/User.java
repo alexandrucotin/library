@@ -2,24 +2,51 @@ package models;
 
 
 public class User {
-	private String idUser;
+	private String iduser;
 	private String role;
 	private String name;
-	private String lastName;
+	private String last_name;
 	private String address;
-	private String optionalAddress;
-	private int cap;
+	private String address_2;
+	private Integer cap;
 	private String city;
-	private int phoneNumber;
+	private String phone_number;
 	private String email;
-	private String bookCardId;
+	private String bookcard_id;
 	private String password;
 	
-	public String getIdUser() {
-		return idUser;
+	public String getIduser() {
+		return iduser;
 	}
-	public void setIdUser(String idUser) {
-		this.idUser = idUser;
+	public void setIduser(String iduser) {
+		this.iduser = iduser;
+	}
+	public String getLast_name() {
+		return last_name;
+	}
+	public void setLast_name(String last_name) {
+		this.last_name = last_name;
+	}
+	public String getAddress_2() {
+		return address_2;
+	}
+	public void setAddress_2(String address_2) {
+		this.address_2 = address_2;
+	}
+	public String getPhone_number() {
+		return phone_number;
+	}
+	public void setPhone_number(String phone_number) {
+		this.phone_number = phone_number;
+	}
+	public String getBookcard_id() {
+		return bookcard_id;
+	}
+	public void setBookcard_id(String bookcard_id) {
+		this.bookcard_id = bookcard_id;
+	}
+	public void setCap(Integer cap) {
+		this.cap = cap;
 	}
 	public String getRole() {
 		return role;
@@ -33,23 +60,12 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getLastName() {
-		return lastName;
-	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+	
 	public String getAddress() {
 		return address;
 	}
 	public void setAddress(String address) {
 		this.address = address;
-	}
-	public String getOptionalAddress() {
-		return optionalAddress;
-	}
-	public void setOptionalAddress(String optionalAddress) {
-		this.optionalAddress = optionalAddress;
 	}
 	public int getCap() {
 		return cap;
@@ -63,23 +79,11 @@ public class User {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public int getPhoneNumber() {
-		return phoneNumber;
-	}
-	public void setPhoneNumber(int phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
 	public String getEmail() {
 		return email;
 	}
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	public String getBookCardId() {
-		return bookCardId;
-	}
-	public void setBookCardId(String bookCardId) {
-		this.bookCardId = bookCardId;
 	}
 	public String getPassword() {
 		return password;

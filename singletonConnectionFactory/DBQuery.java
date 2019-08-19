@@ -15,6 +15,7 @@ import com.mysql.jdbc.ResultSetMetaData;
 
 import models.Book;
 import models.Order;
+import models.User;
 
 public class DBQuery {
 	DataSource ds =  MyDataSourceFactory.getMySQLDataSource();
@@ -113,6 +114,94 @@ public class DBQuery {
         	
         } 
 		return order;
+	}
+	
+	public boolean checkLogin (String query, String userid, String email, String password) {
+		boolean status = false;
+		try {
+			con = ds.getConnection();
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			while(rs.next()){
+				//System.out.println("title="+rs.getString("title")+", author="+rs.getString("author"));
+				String iduserDB = rs.getString("iduser");
+				if (userid == iduserDB ) {
+					status = true;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+				try {
+					if(rs != null) rs.close();
+					if(stmt != null) stmt.close();
+					if(con != null) con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return status;
+	}
+	}
+	
+	public boolean statusUser (String query, String userid, String email, String password) throws SQLException {
+		boolean status = false;
+		try {
+			con = ds.getConnection();
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			while(rs.next()){
+				//System.out.println("title="+rs.getString("title")+", author="+rs.getString("author"));
+				String iduserDB = rs.getString("iduser");
+				if (userid == iduserDB ) {
+					status = true;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+				try {
+					if(rs != null) rs.close();
+					if(stmt != null) stmt.close();
+					if(con != null) con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return status;
+	}
+	
+	public User queryUser (String query) throws SQLException {
+		User user = new User();
+		HashMap<String, Object> userMap = new HashMap<>();
+		userMap = genericQuery(query).get(0);
+		Class cls = user.getClass();
+        // returns the array of Field objects
+        Field[] fields = cls.getDeclaredFields();
+        for(int i = 0; i < fields.length; i++) {
+        	fields[i].setAccessible(true);
+        	String key = fields[i].getName();
+        	
+        	if (userMap.get(key) != null ) {
+        		Object value = userMap.get(key);
+            	if (Integer.class.isAssignableFrom(fields[i].getType())) {
+            	    value = Integer.valueOf((String) userMap.get(key));
+            	} else {
+            		value = (String) userMap.get(key);
+            	}
+        		try {
+					fields[i].set(user, value);
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        	}
+        	
+        } 
+		return user;
 	}
 	
 	public List<Book> queryTopBooks (String query) throws SQLException {
