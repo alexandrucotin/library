@@ -18,9 +18,6 @@ import javax.swing.JPanel;
 public class MainFrame extends JFrame implements ItemListener {
 	
 	
-	// MENU ITEMS //
-	JMenuBar menuBar;
-	JMenu homeshop, topCat, orders, login, register, exit;
 	
 	// CARD LAYOUT //
 	JPanel cards;
@@ -31,7 +28,12 @@ public class MainFrame extends JFrame implements ItemListener {
 	ShopPanel shopPanel = new ShopPanel();
 	OrderTrack orderTrack = new OrderTrack();
 	TopBook topBooks = new TopBook();
+	
+
 	UserPage userPage = new UserPage();
+	LoginPage loginPage = new LoginPage();
+	Basket basket = new Basket();
+	RegisterPage registerPage = new RegisterPage();
 
 	public void addComponentToPane(Container pane) {
 
@@ -41,6 +43,9 @@ public class MainFrame extends JFrame implements ItemListener {
         cards.add(orderTrack, "Order Tracking");
         cards.add(topBooks, "Top Books");
         cards.add(userPage, "Personal Info");
+        cards.add(loginPage, "Login");
+        cards.add(basket, "Basket Info");
+        cards.add(registerPage, "Register");
        // cb.addItemListener(this);
         pane.add(cards, BorderLayout.CENTER);
     }
@@ -50,14 +55,34 @@ public class MainFrame extends JFrame implements ItemListener {
         cl.show(cards, (String)evt.getItem());
     }
     
-
+    public void switchPanel(Container container, String panelName) {
+        CardLayout card = (CardLayout) (container.getLayout());
+        card.show(container, panelName);
+    }
     
-    public  void createAndShowGUI() {
+
+	public CardLayout getCardLayout() {
+		return cardLayout;
+	}
+
+	public void setCardLayout(CardLayout cardLayout) {
+		this.cardLayout = cardLayout;
+	}
+	
+	public JPanel getCards() {
+		return cards;
+	}
+
+	public void setCards(JPanel cards) {
+		this.cards = cards;
+	}
+
+	public  void createAndShowGUI() {
 
     	// MENU ITEMS //
     	JMenuBar menuBar;
-    	JMenu pages, orders, personal, login, register;
-    	JMenuItem shop, topBooks, orderTracking, personalInfo, orderInfo;
+    	JMenu pages, orders, account ;
+    	JMenuItem shop, topBooks, orderTracking, personalInfo, basketInfo, register, login;
     	
     	// Menu setup
     	menuBar = new JMenuBar();
@@ -94,7 +119,7 @@ public class MainFrame extends JFrame implements ItemListener {
     			
     	orders = new JMenu("Orders");
     	orderTracking = new JMenuItem("Order Tracking");
-    	orderInfo = new JMenuItem("Order Info");
+    	basketInfo = new JMenuItem("Basket Info");
     	menuBar.add(orders);
     	
     	orders.add(orderTracking);
@@ -109,8 +134,27 @@ public class MainFrame extends JFrame implements ItemListener {
     	        }
     	    }
     	});
-    	orders.add(orderInfo);
-    	orderInfo.addActionListener(new ActionListener() {
+    	orders.add(basketInfo);
+    	basketInfo.addActionListener(new ActionListener() {
+    	    public void actionPerformed(ActionEvent ev) {
+    	        CardLayout cl = (CardLayout)(cards.getLayout());
+    	        Object source = ev.getSource();
+    	        if (source instanceof JMenuItem) {
+    	        	JMenuItem menuItem = (JMenuItem)source;
+    	            String menuItemTxt = menuItem.getText();
+        	        cl.show(cards, menuItemTxt);
+        	        repaint();
+    	        }
+    	    }
+    	});
+    	
+    	account = new JMenu("Account");
+    	login = new JMenuItem("Login");
+    	register = new JMenuItem("Register");
+    	menuBar.add(account);
+    	account.add(login);
+    	account.add(register);
+    	register.addActionListener(new ActionListener() {
     	    public void actionPerformed(ActionEvent ev) {
     	        CardLayout cl = (CardLayout)(cards.getLayout());
     	        Object source = ev.getSource();
@@ -121,11 +165,8 @@ public class MainFrame extends JFrame implements ItemListener {
     	        }
     	    }
     	});
-    			
-    	personal = new JMenu("Personal");
     	personalInfo = new JMenuItem("Personal Info");
-    	menuBar.add(personal);
-    	personal.add(personalInfo);
+    	account.add(personalInfo);
     	personalInfo.addActionListener(new ActionListener() {
     	    public void actionPerformed(ActionEvent ev) {
     	        CardLayout cl = (CardLayout)(cards.getLayout());
@@ -137,12 +178,17 @@ public class MainFrame extends JFrame implements ItemListener {
     	        }
     	    }
     	});
-    	
-    	login = new JMenu("Login");
-    	menuBar.add(login);
-    			
-    	register = new JMenu("Register");
-    	menuBar.add(register);
+    	login.addActionListener(new ActionListener() {
+    	    public void actionPerformed(ActionEvent ev) {
+    	        CardLayout cl = (CardLayout)(cards.getLayout());
+    	        Object source = ev.getSource();
+    	        if (source instanceof JMenuItem) {
+    	        	JMenuItem menuItem = (JMenuItem)source;
+    	            String menuItemTxt = menuItem.getText();
+        	        cl.show(cards, menuItemTxt);
+    	        }
+    	    }
+    	});
     			
         //Create and set up the window.
         
@@ -153,6 +199,7 @@ public class MainFrame extends JFrame implements ItemListener {
         setJMenuBar(menuBar);
         //Display the window.
         
+        shopPanel.setBasket(basket);
         setSize(650,400);
         setVisible(true);
         addComponentToPane(getContentPane());

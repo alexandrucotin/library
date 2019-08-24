@@ -1,98 +1,121 @@
 package ui;
 
 
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Field;
 import java.sql.SQLException;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
 
-import models.Order;
 import singletonConnectionFactory.DBQuery;
 
 public class LoginPage extends JPanel {
 	
 	private JTextField textField, textField1, textField2;
-	String query;
 	
-	public boolean loginQuery (String query, String userId, String email, String password) throws SQLException {
+	public void goHome() {
+		removeAll();
+		JLabel exitRegister = new JLabel("Sei stato loggato al sistema!");
+		exitRegister.setFont(exitRegister.getFont().deriveFont(24.0f));
+		add(exitRegister);
+		
+		JButton homeButton = new JButton("Torna allo Shop!");
+		add(homeButton);
+		homeButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	MainFrame mainFrame = new MainFrame();
+		        CardLayout cl = (CardLayout) (mainFrame.getCards().getLayout());
+		        cl.show(mainFrame.getCards(), "Shop Page");
+		    }
+		});
+		revalidate();
+	}
+	
+	public void goRegister() {
+		removeAll();
+		JLabel exitRegister = new JLabel("Ti devi registrare!");
+		exitRegister.setFont(exitRegister.getFont().deriveFont(24.0f));
+		add(exitRegister);
+		
+		JButton homeButton = new JButton("Registrati!");
+		add(homeButton);
+		homeButton.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		    	MainFrame mainFrame = new MainFrame();
+		        CardLayout cl = (CardLayout) (mainFrame.getCards().getLayout());
+		        cl.show(mainFrame.getCards(), "Register");
+		    }
+		});
+		revalidate();
+	}
+	
+	public boolean loginQuery (String query, String userId, String email, String password, String role) throws SQLException {
 		boolean login = false;
 		DBQuery infologin = new DBQuery();
-		login = infologin.checkLogin(query, userId, email, password);
+		login = infologin.checkLogin(query, userId, email, password, role);
 		return login;
 	}
 	
-	public boolean statusQuery (String query, String userId, String email, String password) throws SQLException {
-		boolean status = false;
-		DBQuery infoBook = new DBQuery();
-		status = infoBook.statusUser(query, userId, email, password);
-		return status;
-	}	
-	
-	public void orderPanel(String userId, String email, String password) {
+	public void orderPanel(String userId, String email, String password, String role) {
 		
 		try {
-			query = "select email, password from user where email='" + email +"'";
-			loginQuery(query, userId, email, password);
+			String query = "select iduser, email, password from `user`";
+			boolean status = loginQuery(query, userId, email, password, role);
+			if (status) {
+				goHome();
+			}else {
+				goRegister();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 try {     
-
-	         Class cls = orderInfo.getClass();
-	         // returns the array of Field objects
-	         Field[] fields = cls.getDeclaredFields();
-		     data = new String[1][columnNames.length];
-
-		 	int selectedField = 0;
-	         for(int i = 0; i < fields.length; i++) {
-	        	fields[i].setAccessible(true);
-	        	
-	            Object value = fields[i].get(orderInfo);
-	            if (value != null) {
-			        //System.out.println(value);
-		            data[0][selectedField] = value.toString();
-		            model.setValueAt(value.toString(), 0, selectedField);
-		            selectedField++;
-	            }
-	         }
-	      } catch(Exception e) {
-	         System.out.println(e.toString());
-	      }
-	}
+	}	
 	
 	public LoginPage() {
+		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+
+		add(Box.createRigidArea(new Dimension(0,25)));
 		JLabel lblTrackYourOrder = new JLabel("LOGIN PAGE");
+		lblTrackYourOrder.setFont (lblTrackYourOrder.getFont ().deriveFont (32.0f));
+		lblTrackYourOrder.setAlignmentX(lblTrackYourOrder.CENTER_ALIGNMENT);
 		add(lblTrackYourOrder);
-		
+
+		add(Box.createRigidArea(new Dimension(0,25)));
 		JLabel lbluserId = new JLabel("User ID:");
+		lbluserId.setFont (lbluserId.getFont ().deriveFont (10.0f));
 		add(lbluserId);
+
+		add(Box.createRigidArea(new Dimension(0,5)));
 		textField = new JTextField();
-		textField.setPreferredSize(new Dimension(320,30));
 		add(textField);
-		
+		add(Box.createRigidArea(new Dimension(0,15)));
 		
 		JLabel lblemail = new JLabel("Email:");
 		add(lblemail);
 		textField1 = new JTextField();
-		textField1.setPreferredSize(new Dimension(320,30));
+
+		add(Box.createRigidArea(new Dimension(0,5)));
 		add(textField1);
-		
+
+		add(Box.createRigidArea(new Dimension(0,15)));
 		JLabel lblpassword = new JLabel("Pasword:");
 		add(lblpassword);
 		textField2 = new JTextField();
-		textField2.setPreferredSize(new Dimension(320,30));
+
+		add(Box.createRigidArea(new Dimension(0,5)));
 		add(textField2);
 
+		add(Box.createRigidArea(new Dimension(0,35)));
 		JButton btnNewButton = new JButton("Login");
 		add(btnNewButton);
 
@@ -102,11 +125,18 @@ public class LoginPage extends JPanel {
 				String userId = textField.getText();
     	    	String email = textField1.getText();
     	    	String password = textField2.getText();
-    	    	orderPanel(userId,email, password);
+    	    	if (userId != "AD303213") {
+        	    	orderPanel(userId,email, password, "R");
+    	    	} else {
+
+        	    	orderPanel(userId,email, password, "AD");
+    	    	}
     	    	repaint();
 			}
     	});
 
 	}
+	
+	
 
 }

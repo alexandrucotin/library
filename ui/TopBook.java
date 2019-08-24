@@ -22,7 +22,7 @@ public class TopBook extends JPanel {
 
 	public List<Book> bookQuery(String query) throws SQLException {
 		DBQuery infoBook = new DBQuery();
-		List<Book> bookInfo = infoBook.queryTopBooks(query);
+		List<Book> bookInfo = infoBook.queryBooks(query);
 		return bookInfo;
 	}
 

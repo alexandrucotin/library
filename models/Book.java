@@ -15,6 +15,13 @@ public class Book {
 	private Integer points;
 	private Integer bought_times;
 
+	
+	public Book() {};
+	
+	public Book (String title) {
+		this.title = title;
+		
+	}
 	public String getPublication_year() {
 		return publication_year;
 	}
